@@ -3,7 +3,7 @@ env = 'test'
 THREADS = 16
 
 # run parameters
-N = 100 if env == 'test' else 100
+N = 30 if env == 'test' else 100
 G = 2500 if env == 'test' else 10000
 NR = 10 if env == 'test' else 100
 
@@ -49,7 +49,11 @@ EXP_STATS_NAMES = [
     
     'Min_GR_early', 'Max_GR_early', 'Avg_GR_early',
     'Min_GR_late', 'Max_GR_late', 'Avg_GR_late',
-    'Min_GR_avg', 'Max_GR_avg', 'Avg_GR_avg'
+    'Min_GR_avg', 'Max_GR_avg', 'Avg_GR_avg',
+
+    'nonMin_NI', 'nonMax_NI', 'nonAvg_NI',
+    'nonSigma_NI', 'nonAvg_F_found', 'nonSigma_F_found',
+    'nonMax_F_found'
 ]
 FCONSTALL_RUN_STATS_NAMES = [
     'NI',
@@ -65,7 +69,11 @@ FCONSTALL_EXP_STATS_NAMES = [
 
     'Min_Teta_min', 'NI_Teta_min', 'Max_Teta_max', 'NI_Teta_max',
     'Avg_Teta_min', 'Avg_Teta_max', 'Avg_Teta_avg',
-    'Sigma_Teta_min', 'Sigma_Teta_max', 'Sigma_Teta_avg'
+    'Sigma_Teta_min', 'Sigma_Teta_max', 'Sigma_Teta_avg',
+
+    'nonMin_NI', 'nonMax_NI', 'nonAvg_NI',
+    'nonSigma_NI', 'nonAvg_F_found', 'nonSigma_F_found',
+    'nonMax_F_found'
 ]
 c_values = {
     100: [0.9801, 0.970299, 0.96059601, 0.95099005],
