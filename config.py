@@ -27,7 +27,8 @@ RUN_STATS_NAMES = [
     'I_min', 'NI_I_min', 'I_max', 'NI_I_max', 'I_avg',
     's_min', 'NI_s_min', 's_max', 'NI_s_max', 's_avg',
     'GR_early', 'GR_late', 'NI_GR_late', 'GR_avg',
-    'NI_loose', 'Num_loose'
+    'NI_loose', 'Num_loose', 'Avg_NI_loose', 'Sigma_NI_loose', 'Avg_Num_loose',
+    'Sigma_Num_loose'
 ]
 EXP_STATS_NAMES = [
     'Suc', 'N_Suc', 'Min_NI', 'Max_NI', 'Avg_NI', 'Sigma_NI',
@@ -58,7 +59,8 @@ EXP_STATS_NAMES = [
 FCONSTALL_RUN_STATS_NAMES = [
     'NI',
     'RR_min', 'NI_RR_min', 'RR_max', 'NI_RR_max', 'RR_avg',
-    'Teta_min', 'NI_Teta_min', 'Teta_max', 'NI_Teta_max', 'Teta_avg'
+    'Teta_min', 'NI_Teta_min', 'Teta_max', 'NI_Teta_max', 'Teta_avg',
+    'Avg_NI_loose', 'Sigma_NI_loose', 'Avg_Num_loose', 'Sigma_Num_loose'
 ]
 FCONSTALL_EXP_STATS_NAMES = [
     'Suc', 'N_Suc', 'Min_NI', 'Max_NI', 'Avg_NI', 'Sigma_NI',

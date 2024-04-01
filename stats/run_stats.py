@@ -1,5 +1,6 @@
 from config import N
 from stats.generation_stats import GenerationStats
+import numpy as np
 
 class RunStats:
     def __init__(self, param_names: tuple[str]):
@@ -47,6 +48,12 @@ class RunStats:
         # New val
         self.NI_loose = 0
         self.Num_loose = 0
+
+        # Нові поля для втраченої оптимальної особини
+        self.Avg_NI_loose = None
+        self.Sigma_NI_loose = None
+        self.Avg_Num_loose = None
+        self.Sigma_Num_loose = None
 
     def update_stats_for_generation(self, gen_stats: GenerationStats, gen_i):
         # Reproduction Rate
@@ -111,6 +118,30 @@ class RunStats:
         if gen_stats.optimal_individual_lost:
             self.Num_loose += 1
             self.NI_loose = gen_i
+            # Оновлення статистики для втраченої оптимальної особини
+            if self.Num_loose > 0:
+                if self.Avg_NI_loose is None:
+                    self.Avg_NI_loose = gen_i
+                else:
+                    self.Avg_NI_loose = (self.Avg_NI_loose * (self.Num_loose - 1) + gen_i) / self.Num_loose
+
+                if self.Sigma_NI_loose is None:
+                    self.Sigma_NI_loose = 0
+                else:
+                    self.Sigma_NI_loose = np.sqrt(((gen_i - self.Avg_NI_loose) ** 2 + self.Sigma_NI_loose ** 2 * (
+                                self.Num_loose - 1)) / self.Num_loose)
+
+                if self.Avg_Num_loose is None:
+                    self.Avg_Num_loose = self.Num_loose
+                else:
+                    self.Avg_Num_loose = (self.Avg_Num_loose * (self.Num_loose - 1) + self.Num_loose) / self.Num_loose
+
+                if self.Sigma_Num_loose is None:
+                    self.Sigma_Num_loose = 0
+                else:
+                    self.Sigma_Num_loose = np.sqrt(((
+                                                                self.Num_loose - self.Avg_Num_loose) ** 2 + self.Sigma_Num_loose ** 2 * (
+                                                                self.Num_loose - 1)) / self.Num_loose)
 
     def update_final_stats(self, gen_stats: GenerationStats, gen_i):
         if self.param_names[0] != 'FconstALL':
