@@ -60,7 +60,13 @@ EXP_STATS_NAMES = [
     'nonMax_F_found',
 
     'I_start', 'GR_start', 'Pr_start', 'Pr_min', 'NI_Pr_min',
-    'Pr_max', 'NI_Pr_max', 'Pr_avg', 'NI_Pr_avg'
+    'Pr_max', 'NI_Pr_max', 'Pr_avg', 'NI_Pr_avg',
+
+    'Min_I_start', 'Max_I_start', 'Avg_I_start', 'Sigma_I_start',
+    'Min_GR_start', 'Max_GR_start', 'Avg_GR_start', 'Sigma_GR_start',
+    'Min_Pr_min', 'NI_Pr_min', 'Max_Pr_max', 'NI_Pr_max', 'Avg_Pr_min',
+    'Avg_Pr_max', 'Avg_Pr_avg', 'Sigma_Pr_min', 'Sigma_Pr_max', 'Sigma_Pr_avg',
+    'Min_Pr_start', 'Max_Pr_start', 'Avg_Pr_start', 'Sigma_Pr_start'
 ]
 FCONSTALL_RUN_STATS_NAMES = [
     'NI',
@@ -87,7 +93,13 @@ FCONSTALL_EXP_STATS_NAMES = [
     'nonMax_F_found',
 
     'I_start', 'GR_start', 'Pr_start', 'Pr_min', 'NI_Pr_min',
-    'Pr_max', 'NI_Pr_max', 'Pr_avg', 'NI_Pr_avg'
+    'Pr_max', 'NI_Pr_max', 'Pr_avg', 'NI_Pr_avg',
+
+    'Min_I_start', 'Max_I_start', 'Avg_I_start', 'Sigma_I_start',
+    'Min_GR_start', 'Max_GR_start', 'Avg_GR_start', 'Sigma_GR_start',
+    'Min_Pr_min', 'NI_Pr_min', 'Max_Pr_max', 'NI_Pr_max', 'Avg_Pr_min',
+    'Avg_Pr_max', 'Avg_Pr_avg', 'Sigma_Pr_min', 'Sigma_Pr_max', 'Sigma_Pr_avg',
+    'Min_Pr_start', 'Max_Pr_start', 'Avg_Pr_start', 'Sigma_Pr_start'
 ]
 c_values = {
     100: [0.9801, 0.970299, 0.96059601, 0.95099005],

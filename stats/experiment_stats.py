@@ -90,6 +90,33 @@ class ExperimentStats:
         self.Pr_avg = None
         self.NI_Pr_avg = None
 
+        # Нові поля для зберігання критеріїв
+        self.Min_I_start = None
+        self.Max_I_start = None
+        self.Avg_I_start = None
+        self.Sigma_I_start = None
+
+        self.Min_GR_start = None
+        self.Max_GR_start = None
+        self.Avg_GR_start = None
+        self.Sigma_GR_start = None
+
+        self.Min_Pr_min = None
+        self.NI_Pr_min = None
+        self.Max_Pr_max = None
+        self.NI_Pr_max = None
+        self.Avg_Pr_min = None
+        self.Avg_Pr_max = None
+        self.Avg_Pr_avg = None
+        self.Sigma_Pr_min = None
+        self.Sigma_Pr_max = None
+        self.Sigma_Pr_avg = None
+
+        self.Min_Pr_start = None
+        self.Max_Pr_start = None
+        self.Avg_Pr_start = None
+        self.Sigma_Pr_start = None
+
     def add_run(self, run: RunStats, run_i):
         self.runs[run_i] = run
 
@@ -104,12 +131,56 @@ class ExperimentStats:
         self.__calculate_convergence_stats(successful_runs)
         self.__calculate_rr_stats(successful_runs)
         self.__calculate_teta_stats(successful_runs)
+        self.calculate_criteria(successful_runs)
         self.__calculate_unsuccessful_run_stats(unsuccessful_runs)
 
         if self.params[0] != 'FconstALL':
             self.__calculate_s_stats(successful_runs)
             self.__calculate_i_stats(successful_runs)
             self.__calculate_gr_stats(successful_runs)
+
+    def calculate_criteria(self, runs: list[RunStats]):
+        successful_runs = [run for run in self.runs if run.is_successful]
+
+        # Обчислення критеріїв для I_start
+        I_start_values = [run.I_start for run in successful_runs if run.I_start is not None]
+        if I_start_values:
+            self.Min_I_start = min(I_start_values)
+            self.Max_I_start = max(I_start_values)
+            self.Avg_I_start = np.mean(I_start_values)
+            self.Sigma_I_start = np.std(I_start_values)
+
+        # Обчислення критеріїв для GR_start
+        GR_start_values = [run.GR_start for run in successful_runs if run.GR_start is not None]
+        if GR_start_values:
+            self.Min_GR_start = min(GR_start_values)
+            self.Max_GR_start = max(GR_start_values)
+            self.Avg_GR_start = np.mean(GR_start_values)
+            self.Sigma_GR_start = np.std(GR_start_values)
+
+        # Обчислення критеріїв для Pr_min, Pr_max, Pr_avg
+        Pr_min_values = [run.Pr_min for run in successful_runs if run.Pr_min is not None]
+        Pr_max_values = [run.Pr_max for run in successful_runs if run.Pr_max is not None]
+        Pr_avg_values = [run.Pr_avg for run in successful_runs if run.Pr_avg is not None]
+        if Pr_min_values:
+            self.Min_Pr_min = min(Pr_min_values)
+            self.NI_Pr_min = successful_runs[Pr_min_values.index(self.Min_Pr_min)].NI_Pr_min
+            self.Max_Pr_max = max(Pr_max_values)
+            self.NI_Pr_max = successful_runs[Pr_max_values.index(self.Max_Pr_max)].NI_Pr_max
+            self.Avg_Pr_min = np.mean(Pr_min_values)
+            self.Avg_Pr_max = np.mean(Pr_max_values)
+            self.Avg_Pr_avg = np.mean(Pr_avg_values)
+            self.Sigma_Pr_min = np.std(Pr_min_values)
+            self.Sigma_Pr_max = np.std(Pr_max_values)
+            self.Sigma_Pr_avg = np.std(Pr_avg_values)
+
+        # Обчислення критеріїв для Pr_start
+        Pr_start_values = [run.Pr_start for run in successful_runs if run.Pr_start is not None]
+        if Pr_start_values:
+            self.Min_Pr_start = min(Pr_start_values)
+            self.Max_Pr_start = max(Pr_start_values)
+            self.Avg_Pr_start = np.mean(Pr_start_values)
+            self.Sigma_Pr_start = np.std(Pr_start_values)
 
     def __calculate_unsuccessful_run_stats(self, runs: list[RunStats]):
         nonSuc = len(runs) / NR
