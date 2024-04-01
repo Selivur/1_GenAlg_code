@@ -19,6 +19,11 @@ class GenerationStats:
         self.loss_of_diversity = None
         self.optimal_individual_lost = False
 
+        # Criteria after first selection
+        self.I_start = None
+        self.GR_start = None
+        self.Pr_start = None
+
     def calculate_stats_before_selection(self, prev_gen_stats):
         self.ids_before_selection = set(self.population.get_ids())
 

@@ -6,6 +6,19 @@ class RunStats:
     def __init__(self, param_names: tuple[str]):
         self.param_names = param_names
 
+        # Criteria after first selection
+        self.I_start = None
+        self.GR_start = None
+        self.Pr_start = None
+
+        # Criteria over iterations
+        self.Pr_min = None
+        self.NI_Pr_min = None
+        self.Pr_max = None
+        self.NI_Pr_max = None
+        self.Pr_avg = None
+        self.NI_Pr_avg = None
+
         self.NI = None
         self.F_found = None
         self.F_avg = None
@@ -104,6 +117,25 @@ class RunStats:
                 self.s_avg = gen_stats.difference
             else:
                 self.s_avg = (self.s_avg * (gen_i - 1) + gen_stats.difference) / gen_i
+
+            # Update criteria after first selection
+            if gen_i == 1:
+                self.I_start = gen_stats.intensity
+                self.GR_start = gen_stats.growth_rate
+                self.Pr_start = gen_stats.f_best / gen_stats.f_avg
+
+            # Update Pr criteria
+            if self.Pr_min is None or gen_stats.f_best / gen_stats.f_avg < self.Pr_min:
+                self.Pr_min = gen_stats.f_best / gen_stats.f_avg
+                self.NI_Pr_min = gen_i
+            if self.Pr_max is None or gen_stats.f_best / gen_stats.f_avg > self.Pr_max:
+                self.Pr_max = gen_stats.f_best / gen_stats.f_avg
+                self.NI_Pr_max = gen_i
+            if self.Pr_avg is None:
+                self.Pr_avg = gen_stats.f_best / gen_stats.f_avg
+            else:
+                self.Pr_avg = (self.Pr_avg * (gen_i - 1) + gen_stats.f_best / gen_stats.f_avg) / gen_i
+            self.NI_Pr_avg = gen_i
 
             # Growth Rate
             if gen_i == 2:

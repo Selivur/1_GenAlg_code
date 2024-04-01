@@ -79,6 +79,17 @@ class ExperimentStats:
         self.nonSigma_F_found = None
         self.nonMax_F_found = None
 
+        # Criteria
+        self.I_start = None
+        self.GR_start = None
+        self.Pr_start = None
+        self.Pr_min = None
+        self.NI_Pr_min = None
+        self.Pr_max = None
+        self.NI_Pr_max = None
+        self.Pr_avg = None
+        self.NI_Pr_avg = None
+
     def add_run(self, run: RunStats, run_i):
         self.runs[run_i] = run
 
