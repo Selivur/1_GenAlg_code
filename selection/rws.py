@@ -96,8 +96,8 @@ class ExpRankingRWS(SelectionMethod):
         return [((self.c - 1) / (self.c ** N - 1)) * self.c ** (N - rank) for rank in range(N)]
 
     def select(self, population):
-        np.random.shuffle(population.chromosomes)
-        #population.chromosomes = [x for _, x in sorted(zip(population.fitnesses, population.chromosomes), key=lambda pair: pair[0])]
+        #np.random.shuffle(population.chromosomes)
+        population.chromosomes = [x for _, x in sorted(zip(population.fitnesses, population.chromosomes), key=lambda pair: pair[0])]
 
         probabilities = self._get_rank_probabilities()
 

@@ -193,10 +193,11 @@ class ExperimentStats:
             self.nonAvg_NI = np.mean(nonNIs)
             self.nonSigma_NI = np.std(nonNIs)
 
-            nonFounds = [run.F_found for run in runs]
-            self.nonAvg_F_found = np.mean(nonFounds)
-            self.nonSigma_F_found = np.std(nonFounds)
-            self.nonMax_F_found = max(nonFounds)
+            nonFounds = [run.F_found for run in runs if run.F_found is not None]
+            if nonFounds:
+                self.nonAvg_F_found = np.mean(nonFounds)
+                self.nonSigma_F_found = np.std(nonFounds)
+                self.nonMax_F_found = max(nonFounds)
 
     def __calculate_convergence_stats(self, runs: list[RunStats]):
         NIs = [run.NI for run in runs]

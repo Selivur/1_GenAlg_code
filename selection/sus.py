@@ -126,28 +126,26 @@ class WindowSUS(SelectionMethod):
 class ExpRankingSUS(SelectionMethod):
     def __init__(self, c_variant=2):
         self.c_variant = c_variant
-        self.c = self._get_c_value()
-
-    def _get_c_value(self):
-        for i in c_values.keys():
-            if N <= i:
-                return c_values[i][self.c_variant]
-        raise ValueError('N value not supported')
-
-    def _get_rank_probabilities(self):
-        return [((self.c - 1) / (self.c ** N - 1)) * self.c ** (N - rank) for rank in range(N)]
+        self.c = c_values[min(i for i in c_values.keys() if N <= i)][self.c_variant]
 
     def select(self, population: Population):
         np.random.shuffle(population.chromosomes)
-        #population.chromosomes = sorted(population.chromosomes, key=lambda chr: -chr.fitness)
-        probabilities = self._get_rank_probabilities()
+        population.chromosomes = sorted(population.chromosomes, key=lambda chr: chr.fitness)
 
-        fitness_sum = sum(probabilities)
-        fitness_scale = np.cumsum(probabilities)
+        fitness_sum = 0
+        fitness_scale = []
+
+        for index, chromosome in enumerate(population.chromosomes):
+            f_scaled = ((self.c - 1) / (self.c ** N - 1)) * self.c ** (N - (index + 1))
+            fitness_sum += f_scaled
+            if index == 0:
+                fitness_scale.append(f_scaled)
+            else:
+                fitness_scale.append(f_scaled + fitness_scale[index - 1])
 
         if fitness_sum == 0:
             fitness_sum = 0.0001 * N
-            fitness_scale = [0.0001 * (i+1) for i in range(N)]
+            fitness_scale = [0.0001 * (i + 1) / N for i in range(N)]
 
         mating_pool = SUS.basic_sus(population, fitness_sum, fitness_scale)
         population.update_chromosomes(mating_pool)
