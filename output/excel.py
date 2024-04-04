@@ -43,17 +43,6 @@ def write_ff_stats(experiment_stats_list: list[ExperimentStats]):
                 if exp_i == 0:
                     worksheet.write(1, col, stat_name)
 
-        #run_stats_count = len(run_stats_names)
-        #for run_i, run_stats in enumerate(experiment_stats.runs):
-        #    for stat_i, stat_name in enumerate(run_stats_names):
-        #        col = run_i * run_stats_count + stat_i + 2
-        #        value = getattr(run_stats, stat_name)
-        #        if value is not None and np.isinf(float(value)):
-        #            print(f'Value at row={row}, col={col} is Inf')
-        #        elif value is not None and np.isnan(float(value)):
-        #            print(f'Value at row={row}, col={col} is NaN')
-        #        worksheet.write(row, col, value)
-#
             if exp_i == 0:
                 start_col = run_i * run_stats_count + 2
                 worksheet.merge_range(0, start_col, 0, start_col + run_stats_count - 1, f'Run {run_i}', merge_format)
