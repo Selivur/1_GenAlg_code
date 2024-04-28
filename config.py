@@ -4,7 +4,7 @@ THREADS = 16
 
 # run parameters
 N = 100 if env == 'test' else 100
-G = 10000 if env == 'test' else 10*1000*1000
+G = 2500 if env == 'test' else 10*1000*1000
 NR = 100 if env == 'test' else 100
 
 # convergence parameters

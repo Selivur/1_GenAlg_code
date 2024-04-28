@@ -127,8 +127,9 @@ class PowerScalingRWS(SelectionMethod):
 
 
 class TruncationRWS(SelectionMethod):
-    def __init__(self, c):
+    def __init__(self, c, sigma=2):
         self.c = c
+        self.sigma = sigma
 
     def select(self, population):
         fitnesses = np.array(population.fitnesses)

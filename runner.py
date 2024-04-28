@@ -10,6 +10,7 @@ from copy import deepcopy
 from datetime import datetime
 
 def run_experiment(selection_method: SelectionMethod,
+                   selection_method_args,
                    genetic_operator: GeneticOperator,
                    param_names: tuple[str],
                    populations: list[Population]):
@@ -18,6 +19,7 @@ def run_experiment(selection_method: SelectionMethod,
     run_param_list = [
         (populations[run_i],
          selection_method,
+         selection_method_args,
          genetic_operator,
          param_names,
          run_i
@@ -43,8 +45,12 @@ def run_experiment(selection_method: SelectionMethod,
 
 def run(init_population: Population,
         selection_method: SelectionMethod,
+        selection_method_args,
         genetic_operator: GeneticOperator,
         param_names: tuple[str],
         run_i: int):
-    current_run = EvoAlgorithm(deepcopy(init_population), selection_method(), genetic_operator, param_names).run(run_i)
+    if selection_method_args is None:
+        current_run = EvoAlgorithm(deepcopy(init_population), selection_method(), genetic_operator, param_names).run(run_i)
+    else:
+        current_run = EvoAlgorithm(deepcopy(init_population), selection_method(selection_method_args), genetic_operator, param_names).run(run_i)
     return (run_i, current_run)
