@@ -124,7 +124,7 @@ class WindowSUS(SelectionMethod):
 
 
 class ExpRankingSUS(SelectionMethod):
-    def __init__(self, c_variant=2):
+    def __init__(self, c_variant):
         self.c_variant = c_variant
         self.c = c_values[min(i for i in c_values.keys() if N <= i)][self.c_variant]
 
@@ -152,7 +152,7 @@ class ExpRankingSUS(SelectionMethod):
 
 
 class PowerScalingSUS(SelectionMethod):
-    def __init__(self, k=1.005):
+    def __init__(self, k):
         self.k = k
 
     def select(self, population: Population):
@@ -170,9 +170,8 @@ class PowerScalingSUS(SelectionMethod):
 
 
 class TruncationSUS(SelectionMethod):
-    def __init__(self, c=1, sigma=2):
+    def __init__(self, c):
         self.c = c
-        self.sigma = sigma
 
     def select(self, population: Population):
         fitnesses = population.fitnesses

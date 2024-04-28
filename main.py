@@ -36,13 +36,25 @@ if env == 'test':
     ]
     selection_methods = [
         (RWS, 'RWS'),
-        (TruncationRWS, 'TruncationRWS'),
-        (PowerScalingRWS, 'PowerScalingRWS'),
-        (ExpRankingRWS, 'ExpRankingRWS'),
+        (TruncationRWS(2), 'TruncationRWS_2'),
+        (TruncationRWS(4), 'TruncationRWS_4'),
+        (PowerScalingRWS(0.8), 'PowerScalingRWS_0.8'),
+        (PowerScalingRWS(0.9), 'PowerScalingRWS_0.9'),
+        (PowerScalingRWS(1.0), 'PowerScalingRWS_1.0'),
+        (PowerScalingRWS(1.1), 'PowerScalingRWS_1.1'),
+        (PowerScalingRWS(1.2), 'PowerScalingRWS_1.2'),
+        (ExpRankingRWS(0), 'ExpRankingRWS_0'),
+        (ExpRankingRWS(1), 'ExpRankingRWS_1'),
+        (ExpRankingRWS(2), 'ExpRankingRWS_2'),
+        (ExpRankingRWS(3), 'ExpRankingRWS_3'),
         (SUS, 'SUS'),
-        (TruncationSUS, 'TruncationSUS'),
+        (TruncationSUS(2), 'TruncationSUS_2'),
+        (TruncationSUS(4), 'TruncationSUS_4'),
         (PowerScalingSUS, 'PowerScalingSUS'),
-        (ExpRankingSUS, 'ExpRankingSUS')
+        (ExpRankingSUS(0), 'ExpRankingSUS_0'),
+        (ExpRankingSUS(1), 'ExpRankingSUS_1'),
+        (ExpRankingSUS(2), 'ExpRankingSUS_2'),
+        (ExpRankingSUS(3), 'ExpRankingSUS_3')
     ]
     gen_operators = [
         (BlankGenOperator, 'no_operators')
