@@ -33,32 +33,35 @@ fitness_functions = [
 selection_methods = [
     (RWS, 'RWS', None),
     (TruncationRWS, 'TruncationRWS_2', 2),
-    (TruncationRWS, 'TruncationRWS_4', 4),
+    #(TruncationRWS, 'TruncationRWS_4', 4),
     (PowerScalingRWS, 'PowerScalingRWS_0.8', 0.8),
-    (PowerScalingRWS, 'PowerScalingRWS_0.9', 0.9),
-    (PowerScalingRWS, 'PowerScalingRWS_1.0', 1.0),
-    (PowerScalingRWS, 'PowerScalingRWS_1.1', 1.1),
-    (PowerScalingRWS, 'PowerScalingRWS_1.2', 1.2),
+    #(PowerScalingRWS, 'PowerScalingRWS_0.9', 0.9),
+    #(PowerScalingRWS, 'PowerScalingRWS_1.0', 1.0),
+    #(PowerScalingRWS, 'PowerScalingRWS_1.1', 1.1),
+    #(PowerScalingRWS, 'PowerScalingRWS_1.2', 1.2),
     (SUS, 'SUS', None),
     (TruncationSUS, 'TruncationSUS_2', 2),
-    (TruncationSUS, 'TruncationSUS_4', 4),
+    #(TruncationSUS, 'TruncationSUS_4', 4),
     (PowerScalingSUS, 'PowerScalingSUS_0.8', 0.8),
-    (PowerScalingSUS, 'PowerScalingSUS_0.9', 0.9),
-    (PowerScalingSUS, 'PowerScalingSUS_1.0', 1.0),
-    (PowerScalingSUS, 'PowerScalingSUS_1.1', 1.1),
-    (PowerScalingSUS, 'PowerScalingSUS_1.2', 1.2),
+    #(PowerScalingSUS, 'PowerScalingSUS_0.9', 0.9),
+    #(PowerScalingSUS, 'PowerScalingSUS_1.0', 1.0),
+    #(PowerScalingSUS, 'PowerScalingSUS_1.1', 1.1),
+    #(PowerScalingSUS, 'PowerScalingSUS_1.2', 1.2),
 
     (ExpRankingRWS, 'ExpRankingRWS_0', 0),
-    (ExpRankingRWS, 'ExpRankingRWS_1', 1),
-    (ExpRankingRWS, 'ExpRankingRWS_2', 2),
-    (ExpRankingRWS, 'ExpRankingRWS_3', 3),
+    #(ExpRankingRWS, 'ExpRankingRWS_1', 1),
+    #(ExpRankingRWS, 'ExpRankingRWS_2', 2),
+    #(ExpRankingRWS, 'ExpRankingRWS_3', 3),
     (ExpRankingSUS, 'ExpRankingSUS_0', 0),
-    (ExpRankingSUS, 'ExpRankingSUS_1', 1),
-    (ExpRankingSUS, 'ExpRankingSUS_2', 2),
-    (ExpRankingSUS, 'ExpRankingSUS_3', 3)
+    #(ExpRankingSUS, 'ExpRankingSUS_1', 1),
+    #(ExpRankingSUS, 'ExpRankingSUS_2', 2),
+    #(ExpRankingSUS, 'ExpRankingSUS_3', 3)
 ]
 gen_operators = [
-    (BlankGenOperator, 'no_operators')
+    (BlankGenOperator, 'no_operators'),
+    (Crossover, 'crossover'),
+    (Mutation, 'mutation'),
+    (CrossoverAndMutation, 'crossover_and_mutation')
 ]
 
 # a list of tuples of parameters for each run that involves a certain fitness function 

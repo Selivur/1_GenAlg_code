@@ -5,7 +5,11 @@ from copy import deepcopy, copy
 
 
 class Population:
-    def __init__(self, fitness_function, seed=0, chromosomes=None, optimal_fraction=0, is_single_optimal=False):
+    def __init__(self, fitness_function, seed=0,
+                 chromosomes=None,
+                 optimal_fraction=0,
+                 is_single_optimal=False,
+                 use_normal_distribution=False):
         self.fitness_function = fitness_function
 
         if chromosomes is not None:
@@ -19,27 +23,28 @@ class Population:
             else:
                 num_optimal = max(1, int(N * optimal_fraction))
 
-            for chr_i in range(num_optimal):
-                self.chromosomes[chr_i] = copy(fitness_function.get_optimal())
-
-            for chr_i in range(num_optimal, N):
-                genotype = rng.choice([b'0', b'1'], fitness_function.chr_length)
-                self.chromosomes[chr_i] = Chromosome(chr_i, genotype, fitness_function)
+            if use_normal_distribution:
+                for chr_i in range(N):
+                    genotype = rng.binomial(1, 0.5, fitness_function.chr_length).astype('b1')
+                    self.chromosomes[chr_i] = Chromosome(chr_i, genotype, fitness_function)
+            else:
+                for chr_i in range(num_optimal):
+                    self.chromosomes[chr_i] = copy(fitness_function.get_optimal())
+                for chr_i in range(num_optimal, N):
+                    genotype = rng.choice([b'0', b'1'], fitness_function.chr_length)
+                    self.chromosomes[chr_i] = Chromosome(chr_i, genotype, fitness_function)
 
         # Shuffle population.
         np.random.shuffle(self.chromosomes)
         self.update()
 
     def has_converged(self, f_avgs, param_names):
-        has_mutation = 'mut' in param_names[2]
+        has_gen_op = param_names[2] != 'no_operators'
 
-        if not has_mutation:
+        if not has_gen_op:
             return self.is_homogenous_100()
-            
-        if param_names[0] == 'FconstALL':
-            return self.is_homogenous_99()
 
-        return self.has_f_avg_converged(f_avgs)
+        return self.is_homogenous_99()
     
     def has_f_avg_converged(self, f_avgs):
         if len(f_avgs) < N_LAST_GENS:
@@ -52,7 +57,16 @@ class Population:
             diffs.append(abs(curr - prev))
 
         return all(x <= EPS for x in diffs)
-    
+
+    def is_homogenous_90(self):
+        l = self.fitness_function.chr_length
+        for i in range(l):
+            n_zeros = len([True for g in self.genotypes if g[i] == b'0'])
+            percentage = n_zeros / N
+            if 0.01 < percentage < 0.9:
+                return False
+        return True
+
     def is_homogenous_99(self):
         l = self.fitness_function.chr_length
         for i in range(l):

@@ -79,11 +79,20 @@ class EvoAlgorithm:
 
         return gen_stats
 
-
     def __check_success(self, gen_stats: GenerationStats):
-        if self.param_names[0] == 'FconstALL':
+        has_gen_op = self.param_names[2] != 'no_operators'
+        is_FconstALL = self.param_names[0] == 'FconstALL'
+        is_binary_chain = self.param_names[0] == 'FH'
+        is_real_arg = not is_binary_chain
+
+        if is_FconstALL and not has_gen_op:
             return self.has_converged
-        elif self.param_names[0] == 'FHD':
-            return self.has_converged and gen_stats.optimal_count >= N * 0.9
-        else:
+        elif is_FconstALL and has_gen_op:
+            return self.has_converged and self.population.is_homogenous_90()
+        elif is_binary_chain and not has_gen_op:
+            return self.has_converged and self.population.count_optimal_genotype() == N
+        elif is_binary_chain and has_gen_op:
+            return self.has_converged and self.population.count_optimal_genotype() >= N * 0.9
+        elif is_real_arg:
             return self.has_converged and self.population.found_close_to_optimal()
+
