@@ -26,6 +26,8 @@ class Population:
             if use_normal_distribution:
                 for chr_i in range(N):
                     genotype = rng.binomial(1, 0.5, fitness_function.chr_length).astype('b1')
+                    while genotype != fitness_function.get_optimal():
+                        genotype = rng.binomial(1, 0.5, fitness_function.chr_length).astype('b1')
                     self.chromosomes[chr_i] = Chromosome(chr_i, genotype, fitness_function)
             else:
                 for chr_i in range(num_optimal):
@@ -38,7 +40,7 @@ class Population:
         np.random.shuffle(self.chromosomes)
         self.update()
 
-    def has_converged(self, f_avgs, param_names):
+    def has_converged(self, param_names):
         has_gen_op = param_names[2] != 'no_operators'
 
         if not has_gen_op:
@@ -72,7 +74,7 @@ class Population:
         for i in range(l):
             n_zeros = len([True for g in self.genotypes if g[i] == b'0'])
             percentage = n_zeros / N
-            if percentage > 0.01 and percentage < 0.99:
+            if 0.01 < percentage < 0.99:
                 return False
         return True
 

@@ -3,7 +3,7 @@ env = 'test'
 THREADS = 16
 
 # run parameters
-N = 100 if env == 'test' else 100
+N = 10 if env == 'test' else 100
 G = 2500 if env == 'test' else 10*1000*1000
 NR = 20 if env == 'test' else 100
 
@@ -59,7 +59,7 @@ EXP_STATS_NAMES = [
     'nonSigma_NI', 'nonAvg_F_found', 'nonSigma_F_found',
     'nonMax_F_found',
 
-    'I_start', 'GR_start', 'Pr_start', 'Pr_min', 'NI_Pr_min',
+    'Pr_min', 'NI_Pr_min',
     'Pr_max', 'NI_Pr_max', 'Pr_avg', 'NI_Pr_avg',
 
     'Min_I_start', 'Max_I_start', 'Avg_I_start', 'Sigma_I_start',
@@ -92,7 +92,7 @@ FCONSTALL_EXP_STATS_NAMES = [
     'nonSigma_NI', 'nonAvg_F_found', 'nonSigma_F_found',
     'nonMax_F_found',
 
-    'I_start', 'GR_start', 'Pr_start', 'Pr_min', 'NI_Pr_min',
+    'Pr_min', 'NI_Pr_min',
     'Pr_max', 'NI_Pr_max', 'Pr_avg', 'NI_Pr_avg',
 
     'Min_I_start', 'Max_I_start', 'Avg_I_start', 'Sigma_I_start',
