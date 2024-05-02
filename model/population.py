@@ -8,7 +8,7 @@ class Population:
     def __init__(self, fitness_function, seed=0,
                  chromosomes=None,
                  optimal_fraction=0,
-                 is_single_optimal=False,
+                 is_single_optimal=True,
                  use_normal_distribution=False):
         self.fitness_function = fitness_function
 
