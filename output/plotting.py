@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator, MultipleLocator
 from config import N, OUTPUT_FOLDER
 import os
 from model.population import Population
@@ -40,15 +41,30 @@ def plot_run_stats(
             growth_rates = growth_rates[1:]
         __plot_stat(growth_rates, param_names, run_i, 'Growth Rate', 'growth_rate')
 
+        pr_fets = [gen_stats.P_FET for gen_stats in gen_stats_list]
+        __plot_stat(pr_fets, param_names, run_i, 'Fisher Exact Pressure', 'fisher_exact', y_lim=None)
+
+        pressures = [gen_stats.pr for gen_stats in gen_stats_list]
+        __plot_stat(pressures, param_names, run_i, 'Selection Pressure', 'selection_pressure')
+
+        kendall_taus = [gen_stats.Kendall_tau for gen_stats in gen_stats_list]
+        __plot_stat(kendall_taus, param_names, run_i, 'Kendall Tau-b Pressure Test', 'kendall_tau', y_lim=(-1.01, 1.01))
+
+        fraction_of_best = [gen_stats.num_of_best / N for gen_stats in gen_stats_list]
+        __plot_stat(fraction_of_best, param_names, run_i, 'Fraction of best individual accross generation',
+                    'fraction_of_best', y_lim=(-0.01, 1.01))
+
+
 def plot_generation_stats(
         population: Population,
         param_names: tuple[str],
-        run_i, gen_i):
-    __plot_genotype_distribution(population, param_names, run_i, gen_i)
+        run_i, gen_i, homogeneous_frac=None):
+    __plot_genotype_distribution(population, param_names, run_i, gen_i, homogeneous_frac=homogeneous_frac)
     if param_names[0] != 'FconstALL':
-        __plot_fitness_distribution(population, param_names, run_i, gen_i)
-    if param_names[0] not in ['FconstALL', 'FH']:
-        __plot_phenotype_distribution(population, param_names, run_i, gen_i)
+        __plot_fitness_distribution(population, param_names, run_i, gen_i, homogeneous_frac=homogeneous_frac)
+    if param_names[0] not in ['FconstALL', 'FHD', 'FH']:
+        __plot_phenotype_distribution(population, param_names, run_i, gen_i, homogeneous_frac=homogeneous_frac)
+
 
 
 def __plot_stat(
@@ -56,16 +72,28 @@ def __plot_stat(
         param_names: tuple[str],
         run_i,
         ylabel,
-        file_name):
+        file_name,
+        y_lim=None):
     param_hierarchy = __get_path_hierarchy(param_names, run_i)
     path = '/'.join(param_hierarchy)
 
     if not os.path.exists(path):
         os.makedirs(path)
 
-    plt.plot(data)
+    x_ticks = range(len(data))
+    if data[-1] is None:
+        x_ticks = range(1, len(data))
+        data = data[:-1]
+    plt.plot(x_ticks, data)
     plt.ylabel(ylabel)
     plt.xlabel('Generation')
+    # plt.xticks(x_ticks)
+    # Set the ticks for the x-axis with MaxNLocator
+    plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True, nbins=10))
+    # n = len(data)
+    # plt.gca().xaxis.set_minor_locator(MultipleLocator((x_ticks[-1] - x_ticks[0]) / (n + 1)))
+    if y_lim is not None:
+        plt.ylim(*y_lim)
     plt.savefig(f'{path}/{file_name}.png')
     plt.close()
 
@@ -74,50 +102,60 @@ def __plot_stat2(
         param_names: tuple[str],
         run_i,
         label1, label2,
-        file_name):
+        file_name,
+        y_lim=None):
     param_hierarchy = __get_path_hierarchy(param_names, run_i)
     path = '/'.join(param_hierarchy)
 
     if not os.path.exists(path):
         os.makedirs(path)
 
-    plt.plot(data1, label=label1)
-    plt.plot(data2, label=label2)
+    x_ticks = range(1, len(data1)+1)
+    plt.plot(x_ticks, data1, label=label1)
+    plt.plot(x_ticks, data2, label=label2)
 
+    if y_lim is not None:
+        plt.ylim(*y_lim)
+
+    plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True, nbins=10))
     plt.xlabel('Generation')
     plt.legend()
     plt.savefig(f'{path}/{file_name}.png')
     plt.close()
 
-
-def __plot_fitness_distribution(population: Population, param_names: tuple[str], run_i, gen_i):
+def __plot_fitness_distribution(
+        population: Population,
+        param_names: tuple[str],
+        run_i, gen_i, homogeneous_frac=None):
     param_hierarchy = __get_path_hierarchy(param_names, run_i) + ['fitness']
     path = '/'.join(param_hierarchy)
+
+    if homogeneous_frac is not None:
+        path = os.path.join(path, 'homogeneous')
 
     if not os.path.exists(path):
         os.makedirs(path)
 
     x_max = population.fitness_function.get_optimal().fitness
     x_step = x_max / 100
-
-    if x_step != 0:
-        x = np.arange(0, x_max + x_step, x_step)
-        (x, y) = __get_distribution(population.fitnesses, x_max=x_max, x_step=x_step)
-        plt.bar(x, y, width=x_step * 0.8)
-    else:
-        x = [0]
-        y = [len(population.fitnesses)]
-        plt.bar(x, y, width=0.1)
-
+    (x, y) = __get_distribution(population.fitnesses, x_max=x_max, x_step=x_step)
+    plt.bar(x, y, width=x_step*0.8)
     plt.xlabel('Chromosome fitness')
     plt.ylabel('Number of chromosomes')
-    plt.savefig(f'{path}/{gen_i}.png')
+    save_file = f'{path}/{int(homogeneous_frac*100)}_{gen_i}.png' if homogeneous_frac is not None\
+                else f'{path}/{gen_i}.png'
+    plt.savefig(save_file)
     plt.close()
 
-
-def __plot_phenotype_distribution(population: Population, param_names: tuple[str], run_i, gen_i):
+def __plot_phenotype_distribution(
+        population: Population,
+        param_names: tuple[str],
+        run_i, gen_i, homogeneous_frac=None):
     param_hierarchy = __get_path_hierarchy(param_names, run_i) + ['phenotype']
     path = '/'.join(param_hierarchy)
+
+    if homogeneous_frac is not None:
+        path = os.path.join(path, 'homogeneous')
 
     if not os.path.exists(path):
         os.makedirs(path)
@@ -127,27 +165,24 @@ def __plot_phenotype_distribution(population: Population, param_names: tuple[str
     x_min = encoder.lower_bound
     x_max = encoder.upper_bound
     x_step = (x_max - x_min) / 100
-
-    if x_step != 0:
-        x = np.arange(x_min, x_max + x_step, x_step)
-        (x, y) = __get_distribution(phenotypes, x_min=x_min, x_max=x_max, x_step=x_step)
-        plt.bar(x, y, width=x_step * 0.8)
-    else:
-        x = [x_min]
-        y = [len(phenotypes)]
-        plt.bar(x, y, width=0.1)
-
+    (x, y) = __get_distribution(phenotypes, x_min=x_min, x_max=x_max, x_step=x_step)
+    plt.bar(x, y, width=x_step * 0.8)
     plt.xlabel('Chromosome phenotype')
     plt.ylabel('Number of chromosomes')
-    plt.savefig(f'{path}/{gen_i}.png')
+    save_file = f'{path}/{int(homogeneous_frac * 100)}_{gen_i}.png' if homogeneous_frac is not None \
+        else f'{path}/{gen_i}.png'
+    plt.savefig(save_file)
     plt.close()
+
 
 def __plot_genotype_distribution(
         population: Population,
         param_names: tuple[str],
-        run_i, gen_i):
+        run_i, gen_i, homogeneous_frac=None):
     param_hierarchy = __get_path_hierarchy(param_names, run_i) + ['genotype']
     path = '/'.join(param_hierarchy)
+    if homogeneous_frac is not None:
+        path = os.path.join(path, 'homogeneous')
 
     if not os.path.exists(path):
         os.makedirs(path)
@@ -157,7 +192,9 @@ def __plot_genotype_distribution(
     plt.bar(x, y)
     plt.xlabel('Number of 1s in genotype')
     plt.ylabel('Number of chromosomes')
-    plt.savefig(f'{path}/{gen_i}.png')
+    save_file = f'{path}/{int(homogeneous_frac*100)}_{gen_i}.png' if homogeneous_frac is not None\
+                else f'{path}/{gen_i}.png'
+    plt.savefig(save_file)
     plt.close()
 
 def __get_distribution(data, x_min=0, x_max=None, x_step=1):

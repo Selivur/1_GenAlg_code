@@ -4,7 +4,7 @@ from selection.selection_method import SelectionMethod
 from model.gen_operators import GeneticOperator
 from stats.run_stats import RunStats
 from stats.generation_stats import GenerationStats
-from output import plotting
+from output import plotting, excel
 
 
 class EvoAlgorithm:
@@ -23,10 +23,14 @@ class EvoAlgorithm:
         self.prev_gen_stats = None
         self.gen_stats_list = None
         self.has_converged = False
+        self.plot_thresholds = None
         
     def run(self, run_i):
         if run_i < RUNS_TO_PLOT:
             self.gen_stats_list = []
+            self.plot_thresholds = {}
+            for key in [70, 80, 90, 95, 99]:
+                self.plot_thresholds[str(key)] = False
 
         f_avgs = []
         while not self.has_converged and self.gen_i < G:
@@ -43,9 +47,12 @@ class EvoAlgorithm:
 
         gen_stats = self.__calculate_final_stats(run_i)
         self.run_stats.NI = self.gen_i
+
         self.run_stats.is_successful = self.__check_success(gen_stats)
 
         if run_i < RUNS_TO_PLOT:
+            # print(f'Generation stats list = {self.gen_stats_list}')
+            excel.write_generation_stats(self.gen_stats_list, self.param_names, run_i)
             plotting.plot_generation_stats(self.population, self.param_names, run_i, self.gen_i)
             plotting.plot_run_stats(self.gen_stats_list, self.param_names, run_i)
 
@@ -54,7 +61,18 @@ class EvoAlgorithm:
     def __calculate_stats_and_evolve(self, run_i):
         if run_i < RUNS_TO_PLOT and self.gen_i < DISTRIBUTIONS_TO_PLOT:
             plotting.plot_generation_stats(self.population, self.param_names, run_i, self.gen_i)
-        
+
+        if run_i < RUNS_TO_PLOT:
+            for key in [70, 80, 90, 95, 99]:
+                if self.plot_thresholds[str(key)]:
+                    continue
+                if self.population.is_homogeneous_frac(key/100.):
+                    self.plot_thresholds[str(key)] = True
+                    plotting.plot_generation_stats(self.population, self.param_names, run_i,
+                                                   self.gen_i, homogeneous_frac=key/100.)
+                    excel.write_population_stats(self.population, self.param_names, run_i,
+                                                 self.gen_i, key/100.)
+
         gen_stats = GenerationStats(self.population, self.param_names)
         if run_i < RUNS_TO_PLOT:
             self.gen_stats_list.append(gen_stats)

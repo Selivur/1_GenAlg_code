@@ -99,6 +99,12 @@ EXP_STATS_NAMES = [
     'Sigma_Kend_start'
 
 ]
+
+GEN_STATS_NAMES = [
+    'f_avg', 'f_std', 'f_best', 'num_of_best', 'optimal_count', 'growth_rate', 'difference',
+    'intensity', 'reproduction_rate', 'loss_of_diversity', 'n_unique_before_selection',
+    'n_unique_after_selection', 'pr', 'P_FET', 'Kendall_tau'
+]
 FCONSTALL_RUN_STATS_NAMES = [
     'NI',
     'RR_min', 'NI_RR_min', 'RR_max', 'NI_RR_max', 'RR_avg',
@@ -124,6 +130,10 @@ FCONSTALL_EXP_STATS_NAMES = [
     'Avg_unique_X_start', 'Avg_unique_X_fin', 'Min_unique_X_start',
     'Max_unique_X_start', 'Sigma_unique_X_start', 'Sigma_unique_X_fin'
 ]
+FCONSTALL_GEN_STATS_NAMES = [
+    'reproduction_rate', 'loss_of_diversity', 'n_unique_before_selection', 'n_unique_after_selection'
+]
+
 c_values = {
     100: [0.9801, 0.970299, 0.96059601, 0.95099005],
     200: [0.990025, 0.985074875, 0.980149501, 0.975248753],

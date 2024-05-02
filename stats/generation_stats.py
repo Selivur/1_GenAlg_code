@@ -26,6 +26,12 @@ class GenerationStats:
         self.GR_start = None
         self.Pr_start = None
 
+        # Calculate unique chromosomes separately before and after selection
+        self.n_unique_before_selection = None
+        self.n_unique_after_selection = None
+
+        # Selection pressure
+        self.pr = None
         # Fisher's exact test for selection pressure
         self.P_FET = None
         # Kendall's tau-b test for selection pressure
@@ -34,6 +40,7 @@ class GenerationStats:
 
     def calculate_stats_before_selection(self, prev_gen_stats):
         self.ids_before_selection = set(self.population.get_ids())
+        self.n_unique_before_selection = len(self.ids_before_selection)
 
         if self.param_names[0] != 'FconstALL':
             self.f_avg = self.population.get_fitness_avg()
@@ -48,11 +55,15 @@ class GenerationStats:
                 num_of_prev_best = self.population.count_fitness_at_least(prev_gen_stats.f_best)
                 self.growth_rate = num_of_prev_best / prev_gen_stats.num_of_best
 
+            self.pr = self.f_best / self.f_avg
+
+
     def calculate_stats_after_selection(self):
         ids_after_selection = set(self.population.get_ids())
         self.reproduction_rate = len(ids_after_selection) / N
         self.loss_of_diversity = len([True for id in self.ids_before_selection if id not in ids_after_selection]) / N
         self.optimal_individual_lost = self.check_optimal_individual_lost(ids_after_selection)
+        self.n_unique_after_selection = len(self.ids_before_selection)
 
         # Отримання значень придатності з поточного стану популяції
         fitness_values = self.population.fitnesses

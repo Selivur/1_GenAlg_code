@@ -79,6 +79,27 @@ class Population:
                 return False
         return True
 
+    def is_homogeneous_frac(self, frac):
+        """
+        check if the population is homogenous by at least (frac*100) percent
+        :param frac: 0.5 < frac < 1 - fraction of the population that should have the same value for every gene
+        :return: True, if the population satisfies the statement above, False, otherwise
+        """
+        l = self.fitness_function.chr_length
+        for i in range(l):
+            n_zeros = len([True for g in self.genotypes if g[i] == b'0'])
+            percentage = n_zeros / N
+            if percentage > (1 - frac) and percentage < frac:
+                return False
+        return True
+
+    def get_unique_X(self):
+        '''
+        Find the number of different chromosomes in the population
+        '''
+        unique_genotypes = set(tuple(genotype) for genotype in self.genotypes)
+        return len(unique_genotypes)
+
     def is_homogenous_99(self):
         l = self.fitness_function.chr_length
         for i in range(l):
