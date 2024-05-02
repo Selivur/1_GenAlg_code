@@ -27,8 +27,8 @@ RUN_STATS_NAMES = [
     'I_min', 'NI_I_min', 'I_max', 'NI_I_max', 'I_avg',
     's_min', 'NI_s_min', 's_max', 'NI_s_max', 's_avg',
     'GR_early', 'GR_late', 'NI_GR_late', 'GR_avg',
-    'NI_loose', 'Num_loose', 'Avg_NI_loose', 'Sigma_NI_loose', 'Avg_Num_loose',
-    'Sigma_Num_loose',
+
+    'NI_loose', 'Num_loose',
 
     'I_start', 'GR_start', 'Pr_start', 'Pr_min', 'NI_Pr_min',
     'Pr_max', 'NI_Pr_max', 'Pr_avg', 'NI_Pr_avg'
@@ -57,7 +57,10 @@ EXP_STATS_NAMES = [
 
     'nonMin_NI', 'nonMax_NI', 'nonAvg_NI',
     'nonSigma_NI', 'nonAvg_F_found', 'nonSigma_F_found',
-    'nonMax_F_found',
+    'nonMax_F_found', 'nonSuc',
+
+    'Avg_NI_loose', 'Sigma_NI_loose', 'Avg_Num_loose',
+    'Sigma_Num_loose',
 
     'Pr_min', 'NI_Pr_min',
     'Pr_max', 'NI_Pr_max', 'Pr_avg', 'NI_Pr_avg',

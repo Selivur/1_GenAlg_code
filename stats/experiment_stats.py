@@ -71,6 +71,7 @@ class ExperimentStats:
         self.Avg_GR_avg = None
 
         # New
+        self.nonSuc = None
         self.nonMin_NI = None
         self.nonMax_NI = None
         self.nonAvg_NI = None
@@ -117,6 +118,12 @@ class ExperimentStats:
         self.Avg_Pr_start = None
         self.Sigma_Pr_start = None
 
+        # Нові поля для зберігання критеріїв
+        self.Avg_NI_loose = None
+        self.Sigma_NI_loose = None
+        self.Avg_Num_loose = None
+        self.Sigma_Num_loose = None
+
     def add_run(self, run: RunStats, run_i):
         self.runs[run_i] = run
 
@@ -133,6 +140,7 @@ class ExperimentStats:
         self.__calculate_teta_stats(successful_runs)
         self.calculate_criteria(successful_runs)
         self.__calculate_unsuccessful_run_stats(unsuccessful_runs)
+        self.__calculate_loose_stats(unsuccessful_runs)
 
         if self.params[0] != 'FconstALL':
             self.__calculate_s_stats(successful_runs)
@@ -183,8 +191,8 @@ class ExperimentStats:
             self.Sigma_Pr_start = np.std(Pr_start_values)
 
     def __calculate_unsuccessful_run_stats(self, runs: list[RunStats]):
-        nonSuc = len(runs) / NR
-        self.nonSuc = nonSuc
+        nonSucs = len(runs) / NR
+        self.nonSuc = nonSucs
 
         if runs:
             nonNIs = [run.NI for run in runs]
@@ -300,6 +308,31 @@ class ExperimentStats:
             self.Avg_GR_avg = np.mean(gra_list)
             self.Min_GR_avg = min(gra_list)
             self.Max_GR_avg = max(gra_list)
+
+    def __calculate_loose_stats(self, runs: list[RunStats]):
+        # Фільтрація прогонів з втратами оптимальної особини
+        loose_runs = [run for run in runs if run.Num_loose > 0]
+
+        if loose_runs:
+            # Обчислення NI_loose_list - списку номерів ітерацій, на яких була втрачена оптимальна особина
+            NI_loose_list = [run.NI_loose for run in loose_runs]
+
+            # Обчислення середнього та стандартного відхилення номеру ітерації, на якій була втрачена оптимальна особина
+            self.Avg_NI_loose = np.mean(NI_loose_list)
+            self.Sigma_NI_loose = np.std(NI_loose_list)
+
+            # Обчислення Num_loose_list - списку загальної кількості втрат оптимальної особини
+            Num_loose_list = [run.Num_loose for run in loose_runs]
+
+            # Обчислення середнього та стандартного відхилення загальної кількості втрат оптимальної особини
+            self.Avg_Num_loose = np.mean(Num_loose_list)
+            self.Sigma_Num_loose = np.std(Num_loose_list)
+        else:
+            # Якщо немає прогонів з втратами, встановлюємо параметри в None
+            self.Avg_NI_loose = None
+            self.Sigma_NI_loose = None
+            self.Avg_Num_loose = None
+            self.Sigma_Num_loose = None
 
     def __str__(self):
         return ("Suc: " + str(self.Suc) + "%" +

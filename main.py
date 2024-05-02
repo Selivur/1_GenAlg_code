@@ -19,8 +19,8 @@ fitness_functions = [
     #(Fexp(0.25, FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fexp0.25_gray'),
     #(Fexp(1, FloatEncoder(0.0, 10.23, 10)), 'Fexp1'),
     #(Fexp(1, FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fexp1_gray'),
-    #(Fexp(2, FloatEncoder(0.0, 10.23, 10)), 'Fexp2'),
-    #(Fexp(2, FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fexp2_gray'),
+    (Fexp(2, FloatEncoder(0.0, 10.23, 10)), 'Fexp2'),
+    (Fexp(2, FloatEncoder(0.0, 10.23, 10, is_gray=True)), 'Fexp2_gray'),
 
     #(FH(100), 'FH'),
     (Rastrigin(FloatEncoder(-5.12, 5.11, 10)), 'Rastrigin_binary'),

@@ -58,7 +58,7 @@ class RunStats:
         self.NI_GR_late = None
         self.GR_avg = None
 
-        # New val
+        # Нові поля для зберігання втрат оптимальної особини
         self.NI_loose = 0
         self.Num_loose = 0
 
@@ -92,6 +92,12 @@ class RunStats:
             self.Teta_avg = gen_stats.loss_of_diversity
         else:
             self.Teta_avg = (self.Teta_avg * (gen_i - 1) + gen_stats.loss_of_diversity) / gen_i
+
+            # Оновлення NI_loose та Num_loose
+        if gen_stats.optimal_individual_lost:
+            # Якщо оптимальна особина була втрачена в цій генерації
+            self.Num_loose += 1  # Збільшуємо кількість втрат оптимальної особини
+            self.NI_loose = gen_i  # Оновлюємо номер ітерації, коли втрачена оптимальна особина
 
         if self.param_names[0] != 'FconstALL':
             # Selection Intensity
@@ -147,33 +153,6 @@ class RunStats:
                 self.GR_avg = gen_stats.growth_rate
             else:
                 self.GR_avg = (self.GR_avg * (gen_i - 1) + gen_stats.growth_rate) / gen_i
-        if gen_stats.optimal_individual_lost:
-            self.Num_loose += 1
-            self.NI_loose = gen_i
-            # Оновлення статистики для втраченої оптимальної особини
-            if self.Num_loose > 0:
-                if self.Avg_NI_loose is None:
-                    self.Avg_NI_loose = gen_i
-                else:
-                    self.Avg_NI_loose = (self.Avg_NI_loose * (self.Num_loose - 1) + gen_i) / self.Num_loose
-
-                if self.Sigma_NI_loose is None:
-                    self.Sigma_NI_loose = 0
-                else:
-                    self.Sigma_NI_loose = np.sqrt(((gen_i - self.Avg_NI_loose) ** 2 + self.Sigma_NI_loose ** 2 * (
-                                self.Num_loose - 1)) / self.Num_loose)
-
-                if self.Avg_Num_loose is None:
-                    self.Avg_Num_loose = self.Num_loose
-                else:
-                    self.Avg_Num_loose = (self.Avg_Num_loose * (self.Num_loose - 1) + self.Num_loose) / self.Num_loose
-
-                if self.Sigma_Num_loose is None:
-                    self.Sigma_Num_loose = 0
-                else:
-                    self.Sigma_Num_loose = np.sqrt(((
-                                                                self.Num_loose - self.Avg_Num_loose) ** 2 + self.Sigma_Num_loose ** 2 * (
-                                                                self.Num_loose - 1)) / self.Num_loose)
 
     def update_final_stats(self, gen_stats: GenerationStats, gen_i):
         if self.param_names[0] != 'FconstALL':
