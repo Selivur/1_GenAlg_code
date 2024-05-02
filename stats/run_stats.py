@@ -149,31 +149,31 @@ class RunStats:
 
         # Оновлення Fish_start, Fish_min, Fish_max, Fish_avg
         if gen_i == 1:
-            self.Fish_start = gen_stats.fish_value  # Початкове значення Fish
-        if self.Fish_min is None or gen_stats.fish_value < self.Fish_min:
-            self.Fish_min = gen_stats.fish_value
+            self.Fish_start = gen_stats.P_FET  # Початкове значення Fish
+        if self.Fish_min is None or gen_stats.P_FET < self.Fish_min:
+            self.Fish_min = gen_stats.P_FET
             self.NI_Fish_min = gen_i
-        if self.Fish_max is None or gen_stats.fish_value > self.Fish_max:
-            self.Fish_max = gen_stats.fish_value
+        if self.Fish_max is None or gen_stats.P_FET > self.Fish_max:
+            self.Fish_max = gen_stats.P_FET
             self.NI_Fish_max = gen_i
         if self.Fish_avg is None:
-            self.Fish_avg = gen_stats.fish_value
+            self.Fish_avg = gen_stats.P_FET
         else:
-            self.Fish_avg = (self.Fish_avg * (gen_i - 1) + gen_stats.fish_value) / gen_i
+            self.Fish_avg = (self.Fish_avg * (gen_i - 1) + gen_stats.P_FET) / gen_i
 
         # Оновлення Kend_start, Kend_min, Kend_max, Kend_avg
         if gen_i == 1:
-            self.Kend_start = gen_stats.kend_value  # Початкове значення Kend
-        if self.Kend_min is None or gen_stats.kend_value < self.Kend_min:
-            self.Kend_min = gen_stats.kend_value
+            self.Kend_start = gen_stats.Kendall_tau  # Початкове значення Kend
+        if self.Kend_min is None or gen_stats.Kendall_tau < self.Kend_min:
+            self.Kend_min = gen_stats.Kendall_tau
             self.NI_Kend_min = gen_i
-        if self.Kend_max is None or gen_stats.kend_value > self.Kend_max:
-            self.Kend_max = gen_stats.kend_value
+        if self.Kend_max is None or gen_stats.Kendall_tau > self.Kend_max:
+            self.Kend_max = gen_stats.Kendall_tau
             self.NI_Kend_max = gen_i
         if self.Kend_avg is None:
-            self.Kend_avg = gen_stats.kend_value
+            self.Kend_avg = gen_stats.Kendall_tau
         else:
-            self.Kend_avg = (self.Kend_avg * (gen_i - 1) + gen_stats.kend_value) / gen_i
+            self.Kend_avg = (self.Kend_avg * (gen_i - 1) + gen_stats.Kendall_tau) / gen_i
 
         if self.param_names[0] != 'FconstALL':
             # Selection Intensity

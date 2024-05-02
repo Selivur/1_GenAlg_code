@@ -1,6 +1,7 @@
 from config import N
 from model.population import Population
-from scipy.stats import kendalltau
+from scipy.stats import fisher_exact, kendalltau
+import numpy as np
 
 # stats that are used for graphs
 class GenerationStats:
@@ -25,9 +26,11 @@ class GenerationStats:
         self.GR_start = None
         self.Pr_start = None
 
-        # Атрибути для Fish і Kend
-        self.fish_value = None
-        self.kend_value = None
+        # Fisher's exact test for selection pressure
+        self.P_FET = None
+        # Kendall's tau-b test for selection pressure
+        self.Kendall_tau = None
+        self.init_fitnesses = population.fitnesses
 
     def calculate_stats_before_selection(self, prev_gen_stats):
         self.ids_before_selection = set(self.population.get_ids())
@@ -54,8 +57,6 @@ class GenerationStats:
         # Отримання значень придатності з поточного стану популяції
         fitness_values = self.population.fitnesses
 
-        self.calculate_fish_value()
-        self.calculate_kend_value(fitness_values)
         self.ids_before_selection = None
 
         if self.param_names[0] != 'FconstALL':
@@ -66,14 +67,46 @@ class GenerationStats:
             else:
                 self.intensity = self.difference / self.f_std
 
-    def calculate_fish_value(self):
-        # Стандартне відхилення придатності (може бути корисним для оцінки розмаїття)
-        self.fish_value = self.population.get_fitness_std()
+            # Compute Fisher exact test
+            fitnesses = list(self.init_fitnesses)
+            offspring_counts = []
+            is_constant = True
+            for id in range(N):
+                cnt = 0
+                for chr in self.population.chromosomes:
+                    if chr.id == id:
+                        cnt += 1
+                if cnt != 1:
+                    is_constant = False
+                offspring_counts.append(cnt)
+            self.P_FET = self.fisher_exact_test(offspring_counts, fitnesses)
+            # it is important to check for constant because Kendall tau returns nan
+            if is_constant:
+                self.Kendall_tau = 0
+            else:
+                self.Kendall_tau = kendalltau(np.array(fitnesses), np.array(offspring_counts)).statistic
+    @staticmethod
+    def fisher_exact_test(offspring_counts, fitnesses):
+        """
+        Compute FET for a given selection
+        :param offspring_counts: a list of offspring counts for each chromosome id
+        :param fitnesses: a list of chromosome fitnesses
+        """
+        offspring_counts = np.array(offspring_counts)
+        fitnesses = np.array(fitnesses)
 
-    def calculate_kend_value(self, fitness_values):
-        # Обчислення рангової кореляції Кендела між ітераціями
-        kend_corr, _ = kendalltau(range(len(fitness_values)), fitness_values)
-        self.kend_value = kend_corr
+        offspring_median = np.median(offspring_counts)
+        fitness_median = np.median(fitnesses)
+
+        A = np.sum((fitnesses <= fitness_median) & (offspring_counts <= offspring_median))
+        B = np.sum((fitnesses > fitness_median) & (offspring_counts <= offspring_median))
+        C = np.sum((fitnesses <= fitness_median) & (offspring_counts > offspring_median))
+        D = np.sum((fitnesses > fitness_median) & (offspring_counts > offspring_median))
+
+        contingency_table = np.array([[A, B], [C, D]])
+
+        _, pvalue = fisher_exact(contingency_table, alternative='greater')
+        return -np.log10(pvalue)
 
     def check_optimal_individual_lost(self, ids_after_selection):
         optimal_individual_id = self.population.get_optimal_individual_id()

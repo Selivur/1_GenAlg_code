@@ -91,15 +91,7 @@ def write_aggregated_stats(experiment_stats_list: list[ExperimentStats]):
             # Отримання значення атрибута
             value = getattr(experiment_stats, stat_name)
 
-            # Перевірка значення перед записом
-            if value is None or np.isnan(value) or np.isinf(value):
-                # Виводимо значення в консоль
-                print(f"Статистика '{stat_name}' має недійсне значення: {value}")
-
-                # Пропускаємо запис або замінюємо значення
-                value = None  # Наприклад, пропускаємо запис
-            else:
-                worksheet.write(row, col, value)
+            worksheet.write(row, col, value)
 
             if exp_i == 0:
                 worksheet.write(0, col, stat_name)

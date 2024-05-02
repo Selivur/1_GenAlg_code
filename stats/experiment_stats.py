@@ -302,10 +302,14 @@ class ExperimentStats:
 
         if fish_min_values:
             self.Min_Fish_min = min(fish_min_values)
+            self.Avg_Fish_min = np.mean(fish_min_values)
+            self.Sigma_Fish_min_ = np.std(fish_min_values)
             self.NI_Fish_min = successful_runs[fish_min_values.index(self.Min_Fish_min)].NI_Fish_min
 
         if fish_max_values:
             self.Max_Fish_max = max(fish_max_values)
+            self.Avg_Fish_max = np.mean(fish_max_values)
+            self.Sigma_Fish_max_ = np.std(fish_max_values)
             self.NI_Fish_max = successful_runs[fish_max_values.index(self.Max_Fish_max)].NI_Fish_max
 
         if fish_start_values:
@@ -326,10 +330,14 @@ class ExperimentStats:
 
         if kend_min_values:
             self.Min_Kend_min = min(kend_min_values)
+            self.Avg_Kend_min = np.mean(kend_min_values)
+            self.Sigma_Kend_min_ = np.std(kend_min_values)
             self.NI_Kend_min = successful_runs[kend_min_values.index(self.Min_Kend_min)].NI_Kend_min
 
         if kend_max_values:
             self.Max_Kend_max = max(kend_max_values)
+            self.Avg_Kend_max = np.mean(kend_max_values)
+            self.Sigma_Kend_max_ = np.std(kend_max_values)
             self.NI_Kend_max = successful_runs[kend_max_values.index(self.Max_Kend_max)].NI_Kend_max
 
         if kend_start_values:
