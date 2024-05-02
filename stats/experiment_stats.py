@@ -80,17 +80,6 @@ class ExperimentStats:
         self.nonSigma_F_found = None
         self.nonMax_F_found = None
 
-        # Criteria
-        self.I_start = None
-        self.GR_start = None
-        self.Pr_start = None
-        self.Pr_min = None
-        self.NI_Pr_min = None
-        self.Pr_max = None
-        self.NI_Pr_max = None
-        self.Pr_avg = None
-        self.NI_Pr_avg = None
-
         # Нові поля для зберігання критеріїв
         self.Min_I_start = None
         self.Max_I_start = None
@@ -123,6 +112,35 @@ class ExperimentStats:
         self.Sigma_NI_loose = None
         self.Avg_Num_loose = None
         self.Sigma_Num_loose = None
+
+        # Reproduction Rate
+        self.Avg_RR_start = None
+        self.Avg_RR_fin = None
+        self.Min_RR_start = None
+        self.Max_RR_start = None
+        self.Sigma_RR_start = None
+        self.Sigma_RR_fin = None
+
+        # Loss of Diversity
+        self.Avg_Teta_start = None
+        self.Avg_Teta_fin = None
+        self.Min_Teta_start = None
+        self.Max_Teta_start = None
+        self.Sigma_Teta_start = None
+        self.Sigma_Teta_fin = None
+
+        # Unique Chromosomes
+        self.Avg_unique_X_start = None
+        self.Avg_unique_X_fin = None
+        self.Min_unique_X_start = None
+        self.Max_unique_X_start = None
+        self.Sigma_unique_X_start = None
+        self.Sigma_unique_X_fin = None
+
+        self.Min_s_start = None
+        self.Max_s_start = None
+        self.Avg_s_start = None
+        self.Sigma_s_start = None
 
     def add_run(self, run: RunStats, run_i):
         self.runs[run_i] = run
@@ -189,6 +207,60 @@ class ExperimentStats:
             self.Max_Pr_start = max(Pr_start_values)
             self.Avg_Pr_start = np.mean(Pr_start_values)
             self.Sigma_Pr_start = np.std(Pr_start_values)
+
+        # Обчислення RR_start, RR_fin, Sigma_RR_start, Sigma_RR_fin, Min_RR_start, Max_RR_start
+        RR_start_values = [run.RR_start for run in successful_runs if run.RR_start is not None]
+        if RR_start_values:
+            self.Min_RR_start = min(RR_start_values)
+            self.Max_RR_start = max(RR_start_values)
+            self.Avg_RR_start = np.mean(RR_start_values)
+            self.Sigma_RR_start = np.std(RR_start_values)
+
+        RR_fin_values = [run.RR_fin for run in successful_runs if run.RR_fin is not None]
+        if RR_fin_values:
+            self.Avg_RR_fin = np.mean(RR_fin_values)
+            self.Sigma_RR_fin = np.std(RR_fin_values)
+
+        # Обчислення Teta_start, Teta_fin, Sigma_Teta_start, Sigma_Teta_fin, Min_Teta_start, Max_Teta_start
+        Teta_start_values = [run.Teta_start for run in successful_runs if run.Teta_start is not None]
+        if Teta_start_values:
+            self.Min_Teta_start = min(Teta_start_values)
+            self.Max_Teta_start = max(Teta_start_values)
+            self.Avg_Teta_start = np.mean(Teta_start_values)
+            self.Sigma_Teta_start = np.std(Teta_start_values)
+
+        Teta_fin_values = [run.Teta_fin for run in successful_runs if run.Teta_fin is not None]
+        if Teta_fin_values:
+            self.Avg_Teta_fin = np.mean(Teta_fin_values)
+            self.Sigma_Teta_fin = np.std(Teta_fin_values)
+
+        # Обчислення Avg_unique_X_start, Avg_unique_X_fin, Sigma_unique_X_start, Sigma_unique_X_fin, Min_unique_X_start, Max_unique_X_start
+        unique_X_start_values = [run.unique_X_start for run in successful_runs if run.unique_X_start is not None]
+        if unique_X_start_values:
+            self.Min_unique_X_start = min(unique_X_start_values)
+            self.Max_unique_X_start = max(unique_X_start_values)
+            self.Avg_unique_X_start = np.mean(unique_X_start_values)
+            self.Sigma_unique_X_start = np.std(unique_X_start_values)
+
+        unique_X_fin_values = [run.unique_X_fin for run in successful_runs if run.unique_X_fin is not None]
+        if unique_X_fin_values:
+            self.Avg_unique_X_fin = np.mean(unique_X_fin_values)
+            self.Sigma_unique_X_fin = np.std(unique_X_fin_values)
+
+        # Обчислення критеріїв для s_start
+        s_start_values = [run.s_start for run in successful_runs if run.s_start is not None]
+        if s_start_values:
+            # Мінімальне значення s_start
+            self.Min_s_start = min(s_start_values)
+
+            # Максимальне значення s_start
+            self.Max_s_start = max(s_start_values)
+
+            # Середнє значення s_start
+            self.Avg_s_start = np.mean(s_start_values)
+
+            # Стандартне відхилення s_start
+            self.Sigma_s_start = np.std(s_start_values)
 
     def __calculate_unsuccessful_run_stats(self, runs: list[RunStats]):
         nonSucs = len(runs) / NR

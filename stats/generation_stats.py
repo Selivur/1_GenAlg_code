@@ -55,6 +55,7 @@ class GenerationStats:
             else:
                 self.intensity = self.difference / self.f_std
 
+
     def check_optimal_individual_lost(self, ids_after_selection):
         optimal_individual_id = self.population.get_optimal_individual_id()
         if optimal_individual_id not in ids_after_selection:

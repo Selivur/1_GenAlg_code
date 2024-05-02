@@ -30,8 +30,15 @@ RUN_STATS_NAMES = [
 
     'NI_loose', 'Num_loose',
 
-    'I_start', 'GR_start', 'Pr_start', 'Pr_min', 'NI_Pr_min',
-    'Pr_max', 'NI_Pr_max', 'Pr_avg', 'NI_Pr_avg'
+    'Pr_min', 'NI_Pr_min',
+    'Pr_max', 'NI_Pr_max', 'Pr_avg', 'NI_Pr_avg',
+
+    'I_start', 'GR_start', 'Pr_start',
+
+    'RR_start', 'RR_fin', 'Teta_start', 'Teta_fin',
+    'unique_X_start', 'unique_X_fin',
+
+    's_start'
 ]
 EXP_STATS_NAMES = [
     'Suc', 'N_Suc', 'Min_NI', 'Max_NI', 'Avg_NI', 'Sigma_NI',
@@ -62,27 +69,31 @@ EXP_STATS_NAMES = [
     'Avg_NI_loose', 'Sigma_NI_loose', 'Avg_Num_loose',
     'Sigma_Num_loose',
 
-    'Pr_min', 'NI_Pr_min',
-    'Pr_max', 'NI_Pr_max', 'Pr_avg', 'NI_Pr_avg',
-
     'Min_I_start', 'Max_I_start', 'Avg_I_start', 'Sigma_I_start',
     'Min_GR_start', 'Max_GR_start', 'Avg_GR_start', 'Sigma_GR_start',
     'Min_Pr_min', 'NI_Pr_min', 'Max_Pr_max', 'NI_Pr_max', 'Avg_Pr_min',
     'Avg_Pr_max', 'Avg_Pr_avg', 'Sigma_Pr_min', 'Sigma_Pr_max', 'Sigma_Pr_avg',
-    'Min_Pr_start', 'Max_Pr_start', 'Avg_Pr_start', 'Sigma_Pr_start'
+    'Min_Pr_start', 'Max_Pr_start', 'Avg_Pr_start', 'Sigma_Pr_start',
+
+    'Avg_RR_start', 'Avg_RR_fin', 'Min_RR_start', 'Max_RR_start',
+    'Sigma_RR_start', 'Sigma_RR_fin', 'Avg_Teta_start', 'Avg_Teta_fin',
+    'Min_Teta_start', 'Max_Teta_start', 'Sigma_Teta_start', 'Sigma_Teta_fin',
+    'Avg_unique_X_start', 'Avg_unique_X_fin', 'Min_unique_X_start',
+    'Max_unique_X_start', 'Sigma_unique_X_start', 'Sigma_unique_X_fin',
+
+    'Min_s_start', 'Max_s_start', 'Avg_s_start', 'Sigma_s_start'
 ]
 FCONSTALL_RUN_STATS_NAMES = [
     'NI',
     'RR_min', 'NI_RR_min', 'RR_max', 'NI_RR_max', 'RR_avg',
     'Teta_min', 'NI_Teta_min', 'Teta_max', 'NI_Teta_max', 'Teta_avg',
-    'Avg_NI_loose', 'Sigma_NI_loose', 'Avg_Num_loose', 'Sigma_Num_loose',
 
-    'I_start', 'GR_start', 'Pr_start', 'Pr_min', 'NI_Pr_min',
-    'Pr_max', 'NI_Pr_max', 'Pr_avg', 'NI_Pr_avg'
+    'RR_start', 'RR_fin', 'Teta_start', 'Teta_fin',
+    'unique_X_start', 'unique_X_fin'
 ]
 FCONSTALL_EXP_STATS_NAMES = [
     'Suc', 'N_Suc', 'Min_NI', 'Max_NI', 'Avg_NI', 'Sigma_NI',
-    
+
     'Min_RR_min', 'NI_RR_min', 'Max_RR_max', 'NI_RR_max',
     'Avg_RR_min', 'Avg_RR_max', 'Avg_RR_avg',
     'Sigma_RR_min', 'Sigma_RR_max', 'Sigma_RR_avg',
@@ -91,18 +102,11 @@ FCONSTALL_EXP_STATS_NAMES = [
     'Avg_Teta_min', 'Avg_Teta_max', 'Avg_Teta_avg',
     'Sigma_Teta_min', 'Sigma_Teta_max', 'Sigma_Teta_avg',
 
-    'nonMin_NI', 'nonMax_NI', 'nonAvg_NI',
-    'nonSigma_NI', 'nonAvg_F_found', 'nonSigma_F_found',
-    'nonMax_F_found',
-
-    'Pr_min', 'NI_Pr_min',
-    'Pr_max', 'NI_Pr_max', 'Pr_avg', 'NI_Pr_avg',
-
-    'Min_I_start', 'Max_I_start', 'Avg_I_start', 'Sigma_I_start',
-    'Min_GR_start', 'Max_GR_start', 'Avg_GR_start', 'Sigma_GR_start',
-    'Min_Pr_min', 'NI_Pr_min', 'Max_Pr_max', 'NI_Pr_max', 'Avg_Pr_min',
-    'Avg_Pr_max', 'Avg_Pr_avg', 'Sigma_Pr_min', 'Sigma_Pr_max', 'Sigma_Pr_avg',
-    'Min_Pr_start', 'Max_Pr_start', 'Avg_Pr_start', 'Sigma_Pr_start'
+    'Avg_RR_start', 'Avg_RR_fin', 'Min_RR_start', 'Max_RR_start',
+    'Sigma_RR_start', 'Sigma_RR_fin', 'Avg_Teta_start', 'Avg_Teta_fin',
+    'Min_Teta_start', 'Max_Teta_start', 'Sigma_Teta_start', 'Sigma_Teta_fin',
+    'Avg_unique_X_start', 'Avg_unique_X_fin', 'Min_unique_X_start',
+    'Max_unique_X_start', 'Sigma_unique_X_start', 'Sigma_unique_X_fin'
 ]
 c_values = {
     100: [0.9801, 0.970299, 0.96059601, 0.95099005],

@@ -68,6 +68,18 @@ class RunStats:
         self.Avg_Num_loose = None
         self.Sigma_Num_loose = None
 
+        self.RR_start = None  # Швидкість репродукції на 1-ій ітерації
+        self.RR_fin = None  # Швидкість репродукції на останній ітерації
+
+        self.Teta_start = None  # Втрата різноманітності на 1-ій ітерації
+        self.Teta_fin = None  # Втрата різноманітності на останній ітерації
+
+        self.unique_X_start = None  # Кількість унікальних хромосом в початковій популяції
+        self.unique_X_fin = None  # Кількість унікальних хромосом в фінальній популяції
+
+        # Поле для збереження різниці відбору після першого відбору
+        self.s_start = None
+
     def update_stats_for_generation(self, gen_stats: GenerationStats, gen_i):
         # Reproduction Rate
         if self.RR_min is None or gen_stats.reproduction_rate < self.RR_min:
@@ -81,6 +93,11 @@ class RunStats:
         else:
             self.RR_avg = (self.RR_avg * (gen_i - 1) + gen_stats.reproduction_rate) / gen_i
 
+        # Оновлення RR_start, RR_fin
+        if gen_i == 1:
+            self.RR_start = gen_stats.reproduction_rate
+        self.RR_fin = gen_stats.reproduction_rate
+
         # Loss of Diversity
         if self.Teta_min is None or gen_stats.loss_of_diversity < self.Teta_min:
             self.Teta_min = gen_stats.loss_of_diversity
@@ -93,11 +110,26 @@ class RunStats:
         else:
             self.Teta_avg = (self.Teta_avg * (gen_i - 1) + gen_stats.loss_of_diversity) / gen_i
 
+        # Оновлення Teta_start, Teta_fin
+        if gen_i == 1:
+            self.Teta_start = gen_stats.loss_of_diversity
+        self.Teta_fin = gen_stats.loss_of_diversity
+
             # Оновлення NI_loose та Num_loose
         if gen_stats.optimal_individual_lost:
             # Якщо оптимальна особина була втрачена в цій генерації
             self.Num_loose += 1  # Збільшуємо кількість втрат оптимальної особини
             self.NI_loose = gen_i  # Оновлюємо номер ітерації, коли втрачена оптимальна особина
+
+            # Оновлення unique_X_start, unique_X_fin
+        if gen_i == 1:
+            self.unique_X_start = gen_stats.population.count_unique_chromosomes()
+        self.unique_X_fin = gen_stats.population.count_unique_chromosomes()
+
+        # Різниця відбору після першого відбору (s_start)
+        if gen_i == 1:
+            # Обчислюємо різницю відбору s_start
+            self.s_start = gen_stats.difference
 
         if self.param_names[0] != 'FconstALL':
             # Selection Intensity
@@ -155,6 +187,9 @@ class RunStats:
                 self.GR_avg = (self.GR_avg * (gen_i - 1) + gen_stats.growth_rate) / gen_i
 
     def update_final_stats(self, gen_stats: GenerationStats, gen_i):
+        # Оновлення unique_X_fin
+        self.unique_X_fin = gen_stats.population.count_unique_chromosomes()  # Оновлення кількості унікальних хромосом
+
         if self.param_names[0] != 'FconstALL':
             self.F_found = gen_stats.f_best
             self.F_avg = gen_stats.f_avg

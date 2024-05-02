@@ -60,6 +60,16 @@ class Population:
 
         return all(x <= EPS for x in diffs)
 
+    def count_unique_chromosomes(self):
+        # Отримуємо список усіх генотипів у популяції
+        all_genotypes = [chr.genotype for chr in self.chromosomes]
+
+        # Використовуємо набір (set) для фільтрації унікальних генотипів
+        unique_genotypes = set(map(tuple, all_genotypes))  # Використовуємо map, щоб перетворити генотипи у кортежі
+
+        # Повертаємо кількість унікальних генотипів
+        return len(unique_genotypes)
+
     def is_homogenous_90(self):
         l = self.fitness_function.chr_length
         for i in range(l):
