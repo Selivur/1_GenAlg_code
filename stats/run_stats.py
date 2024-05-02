@@ -80,6 +80,22 @@ class RunStats:
         # Поле для збереження різниці відбору після першого відбору
         self.s_start = None
 
+        # Нові поля для критеріїв PFET (Fish)
+        self.Fish_start = None
+        self.Fish_min = None
+        self.NI_Fish_min = None
+        self.Fish_max = None
+        self.NI_Fish_max = None
+        self.Fish_avg = None
+
+        # Нові поля для критеріїв Pτ (Kend)
+        self.Kend_start = None
+        self.Kend_min = None
+        self.NI_Kend_min = None
+        self.Kend_max = None
+        self.NI_Kend_max = None
+        self.Kend_avg = None
+
     def update_stats_for_generation(self, gen_stats: GenerationStats, gen_i):
         # Reproduction Rate
         if self.RR_min is None or gen_stats.reproduction_rate < self.RR_min:
@@ -130,6 +146,34 @@ class RunStats:
         if gen_i == 1:
             # Обчислюємо різницю відбору s_start
             self.s_start = gen_stats.difference
+
+        # Оновлення Fish_start, Fish_min, Fish_max, Fish_avg
+        if gen_i == 1:
+            self.Fish_start = gen_stats.fish_value  # Початкове значення Fish
+        if self.Fish_min is None or gen_stats.fish_value < self.Fish_min:
+            self.Fish_min = gen_stats.fish_value
+            self.NI_Fish_min = gen_i
+        if self.Fish_max is None or gen_stats.fish_value > self.Fish_max:
+            self.Fish_max = gen_stats.fish_value
+            self.NI_Fish_max = gen_i
+        if self.Fish_avg is None:
+            self.Fish_avg = gen_stats.fish_value
+        else:
+            self.Fish_avg = (self.Fish_avg * (gen_i - 1) + gen_stats.fish_value) / gen_i
+
+        # Оновлення Kend_start, Kend_min, Kend_max, Kend_avg
+        if gen_i == 1:
+            self.Kend_start = gen_stats.kend_value  # Початкове значення Kend
+        if self.Kend_min is None or gen_stats.kend_value < self.Kend_min:
+            self.Kend_min = gen_stats.kend_value
+            self.NI_Kend_min = gen_i
+        if self.Kend_max is None or gen_stats.kend_value > self.Kend_max:
+            self.Kend_max = gen_stats.kend_value
+            self.NI_Kend_max = gen_i
+        if self.Kend_avg is None:
+            self.Kend_avg = gen_stats.kend_value
+        else:
+            self.Kend_avg = (self.Kend_avg * (gen_i - 1) + gen_stats.kend_value) / gen_i
 
         if self.param_names[0] != 'FconstALL':
             # Selection Intensity

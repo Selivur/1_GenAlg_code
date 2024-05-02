@@ -142,6 +142,38 @@ class ExperimentStats:
         self.Avg_s_start = None
         self.Sigma_s_start = None
 
+        # Додайте нові поля для критеріїв Фішера (Fish)
+        self.Min_Fish_min = None
+        self.NI_Fish_min = None
+        self.Max_Fish_max = None
+        self.NI_Fish_max = None
+        self.Avg_Fish_min = None
+        self.Avg_Fish_max = None
+        self.Avg_Fish_avg = None
+        self.Sigma_Fish_max_ = None
+        self.Sigma_Fish_min_ = None
+        self.Sigma_Fish_avg_ = None
+        self.Min_Fish_start = None
+        self.Max_Fish_start = None
+        self.Avg_Fish_start = None
+        self.Sigma_Fish_start = None
+
+        # Додайте нові поля для критеріїв Кендела (Kend)
+        self.Min_Kend_min = None
+        self.NI_Kend_min = None
+        self.Max_Kend_max = None
+        self.NI_Kend_max = None
+        self.Avg_Kend_min = None
+        self.Avg_Kend_max = None
+        self.Avg_Kend_avg = None
+        self.Sigma_Kend_max_ = None
+        self.Sigma_Kend_min_ = None
+        self.Sigma_Kend_avg_ = None
+        self.Min_Kend_start = None
+        self.Max_Kend_start = None
+        self.Avg_Kend_start = None
+        self.Sigma_Kend_start = None
+
     def add_run(self, run: RunStats, run_i):
         self.runs[run_i] = run
 
@@ -261,6 +293,54 @@ class ExperimentStats:
 
             # Стандартне відхилення s_start
             self.Sigma_s_start = np.std(s_start_values)
+
+        # Обчислення статистичних характеристик для Фішера (Fish)
+        fish_min_values = [run.Fish_min for run in successful_runs if run.Fish_min is not None]
+        fish_max_values = [run.Fish_max for run in successful_runs if run.Fish_max is not None]
+        fish_start_values = [run.Fish_start for run in successful_runs if run.Fish_start is not None]
+        fish_avg_values = [run.Fish_avg for run in successful_runs if run.Fish_avg is not None]
+
+        if fish_min_values:
+            self.Min_Fish_min = min(fish_min_values)
+            self.NI_Fish_min = successful_runs[fish_min_values.index(self.Min_Fish_min)].NI_Fish_min
+
+        if fish_max_values:
+            self.Max_Fish_max = max(fish_max_values)
+            self.NI_Fish_max = successful_runs[fish_max_values.index(self.Max_Fish_max)].NI_Fish_max
+
+        if fish_start_values:
+            self.Min_Fish_start = min(fish_start_values)
+            self.Max_Fish_start = max(fish_start_values)
+            self.Avg_Fish_start = np.mean(fish_start_values)
+            self.Sigma_Fish_start = np.std(fish_start_values)
+
+        if fish_avg_values:
+            self.Avg_Fish_avg = np.mean(fish_avg_values)
+            self.Sigma_Fish_avg_ = np.std(fish_avg_values)
+
+            # Обчислення статистичних характеристик для Кендела (Kend)
+        kend_min_values = [run.Kend_min for run in successful_runs if run.Kend_min is not None]
+        kend_max_values = [run.Kend_max for run in successful_runs if run.Kend_max is not None]
+        kend_start_values = [run.Kend_start for run in successful_runs if run.Kend_start is not None]
+        kend_avg_values = [run.Kend_avg for run in successful_runs if run.Kend_avg is not None]
+
+        if kend_min_values:
+            self.Min_Kend_min = min(kend_min_values)
+            self.NI_Kend_min = successful_runs[kend_min_values.index(self.Min_Kend_min)].NI_Kend_min
+
+        if kend_max_values:
+            self.Max_Kend_max = max(kend_max_values)
+            self.NI_Kend_max = successful_runs[kend_max_values.index(self.Max_Kend_max)].NI_Kend_max
+
+        if kend_start_values:
+            self.Min_Kend_start = min(kend_start_values)
+            self.Max_Kend_start = max(kend_start_values)
+            self.Avg_Kend_start = np.mean(kend_start_values)
+            self.Sigma_Kend_start = np.std(kend_start_values)
+
+        if kend_avg_values:
+            self.Avg_Kend_avg = np.mean(kend_avg_values)
+            self.Sigma_Kend_avg_ = np.std(kend_avg_values)
 
     def __calculate_unsuccessful_run_stats(self, runs: list[RunStats]):
         nonSucs = len(runs) / NR

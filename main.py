@@ -103,7 +103,7 @@ if __name__ == '__main__':
         ff_name = experiment_params[ff][0][3][0]
         log(f'{ff_name} experiments finished in {(ff_end_time - ff_start_time):.2f}s')
 
-    excel.write_aggregated_stats(results)
+    #excel.write_aggregated_stats(results)
 
     print('----------------------------------------------------------------------')
     end_time = time.time()

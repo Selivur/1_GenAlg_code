@@ -38,7 +38,11 @@ RUN_STATS_NAMES = [
     'RR_start', 'RR_fin', 'Teta_start', 'Teta_fin',
     'unique_X_start', 'unique_X_fin',
 
-    's_start'
+    's_start',
+
+    'Fish_start', 'Fish_min', 'NI_Fish_min', 'Fish_max', 'NI_Fish_max',
+    'Fish_avg', 'Kend_start', 'Kend_min', 'NI_Kend_min', 'Kend_max',
+    'NI_Kend_max', 'Kend_avg'
 ]
 EXP_STATS_NAMES = [
     'Suc', 'N_Suc', 'Min_NI', 'Max_NI', 'Avg_NI', 'Sigma_NI',
@@ -81,7 +85,19 @@ EXP_STATS_NAMES = [
     'Avg_unique_X_start', 'Avg_unique_X_fin', 'Min_unique_X_start',
     'Max_unique_X_start', 'Sigma_unique_X_start', 'Sigma_unique_X_fin',
 
-    'Min_s_start', 'Max_s_start', 'Avg_s_start', 'Sigma_s_start'
+    'Min_s_start', 'Max_s_start', 'Avg_s_start', 'Sigma_s_start',
+
+    'Min_Fish_min', 'NI_Fish_min', 'Max_Fish_max',
+    'NI_Fish_max', 'Avg_Fish_min', 'Avg_Fish_max',
+    'Avg_Fish_avg', 'Sigma_Fish_max_', 'Sigma_Fish_min_',
+    'Sigma_Fish_avg_', 'Min_Fish_start', 'Max_Fish_start',
+    'Avg_Fish_start', 'Sigma_Fish_start', 'Min_Kend_min',
+    'NI_Kend_min', 'Max_Kend_max', 'NI_Kend_max',
+    'Avg_Kend_min', 'Avg_Kend_max', 'Avg_Kend_avg',
+    'Sigma_Kend_max_', 'Sigma_Kend_min_', 'Sigma_Kend_avg_',
+    'Min_Kend_start', 'Max_Kend_start', 'Avg_Kend_start',
+    'Sigma_Kend_start'
+
 ]
 FCONSTALL_RUN_STATS_NAMES = [
     'NI',

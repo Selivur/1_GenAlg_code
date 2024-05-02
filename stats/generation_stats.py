@@ -1,5 +1,6 @@
 from config import N
 from model.population import Population
+from scipy.stats import kendalltau
 
 # stats that are used for graphs
 class GenerationStats:
@@ -24,6 +25,10 @@ class GenerationStats:
         self.GR_start = None
         self.Pr_start = None
 
+        # Атрибути для Fish і Kend
+        self.fish_value = None
+        self.kend_value = None
+
     def calculate_stats_before_selection(self, prev_gen_stats):
         self.ids_before_selection = set(self.population.get_ids())
 
@@ -45,6 +50,12 @@ class GenerationStats:
         self.reproduction_rate = len(ids_after_selection) / N
         self.loss_of_diversity = len([True for id in self.ids_before_selection if id not in ids_after_selection]) / N
         self.optimal_individual_lost = self.check_optimal_individual_lost(ids_after_selection)
+
+        # Отримання значень придатності з поточного стану популяції
+        fitness_values = self.population.fitnesses
+
+        self.calculate_fish_value()
+        self.calculate_kend_value(fitness_values)
         self.ids_before_selection = None
 
         if self.param_names[0] != 'FconstALL':
@@ -55,6 +66,14 @@ class GenerationStats:
             else:
                 self.intensity = self.difference / self.f_std
 
+    def calculate_fish_value(self):
+        # Стандартне відхилення придатності (може бути корисним для оцінки розмаїття)
+        self.fish_value = self.population.get_fitness_std()
+
+    def calculate_kend_value(self, fitness_values):
+        # Обчислення рангової кореляції Кендела між ітераціями
+        kend_corr, _ = kendalltau(range(len(fitness_values)), fitness_values)
+        self.kend_value = kend_corr
 
     def check_optimal_individual_lost(self, ids_after_selection):
         optimal_individual_id = self.population.get_optimal_individual_id()
