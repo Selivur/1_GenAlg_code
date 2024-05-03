@@ -96,7 +96,6 @@ class ExpRankingRWS(SelectionMethod):
         return [((self.c - 1) / (self.c ** N - 1)) * self.c ** (N - rank) for rank in range(N)]
 
     def select(self, population):
-        #np.random.shuffle(population.chromosomes)
         population.chromosomes = [x for _, x in sorted(zip(population.fitnesses, population.chromosomes), key=lambda pair: pair[0])]
 
         probabilities = self._get_rank_probabilities()
@@ -109,10 +108,15 @@ class ExpRankingRWS(SelectionMethod):
 
 
 class PowerScalingRWS(SelectionMethod):
-    def __init__(self, k):
-        self.k = k
+    def __init__(self, k_start=0.8, k_end=1.2):
+        self.k_start = k_start
+        self.k_end = k_end
+        self.k = k_start
 
     def select(self, population):
+        if np.median(population.fitnesses) >= np.mean(population.fitnesses):
+            self.k = self.k_end
+
         fitness_list = [f ** self.k for f in population.fitnesses]
         fitness_sum = sum(fitness_list)
 

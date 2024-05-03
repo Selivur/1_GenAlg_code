@@ -7,7 +7,7 @@ from copy import deepcopy, copy
 class Population:
     def __init__(self, fitness_function, seed=0,
                  chromosomes=None,
-                 optimal_fraction=0,
+                 optimal_fraction=0.1,
                  is_single_optimal=True,
                  use_normal_distribution=False):
         self.fitness_function = fitness_function
@@ -25,9 +25,9 @@ class Population:
 
             if use_normal_distribution:
                 for chr_i in range(N):
-                    genotype = rng.binomial(1, 0.5, fitness_function.chr_length).astype('b1')
-                    while genotype != fitness_function.get_optimal():
-                        genotype = rng.binomial(1, 0.5, fitness_function.chr_length).astype('b1')
+                    genotype = optimal_genotype = fitness_function.get_optimal().genotype
+                    while np.all(genotype == optimal_genotype):
+                        genotype = rng.choice([b'0', b'1'], fitness_function.chr_length)
                     self.chromosomes[chr_i] = Chromosome(chr_i, genotype, fitness_function)
             else:
                 for chr_i in range(num_optimal):

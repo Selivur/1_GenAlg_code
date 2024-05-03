@@ -129,7 +129,6 @@ class ExpRankingSUS(SelectionMethod):
         self.c = c_values[min(i for i in c_values.keys() if N <= i)][self.c_variant]
 
     def select(self, population: Population):
-        np.random.shuffle(population.chromosomes)
         population.chromosomes = sorted(population.chromosomes, key=lambda chr: chr.fitness)
 
         fitness_sum = 0
@@ -150,12 +149,16 @@ class ExpRankingSUS(SelectionMethod):
         mating_pool = SUS.basic_sus(population, fitness_sum, fitness_scale)
         population.update_chromosomes(mating_pool)
 
-
 class PowerScalingSUS(SelectionMethod):
-    def __init__(self, k):
-        self.k = k
+    def __init__(self, k_start=0.8, k_end=1.2):
+        self.k_start = k_start
+        self.k_end = k_end
+        self.k = k_start
 
     def select(self, population: Population):
+        if np.median(population.fitnesses) >= np.mean(population.fitnesses):
+            self.k = self.k_end
+
         fitnesses = [f ** self.k for f in population.fitnesses]
         fitness_sum = sum(fitnesses)
         fitness_scale = np.cumsum(fitnesses)
@@ -167,7 +170,6 @@ class PowerScalingSUS(SelectionMethod):
 
         mating_pool = SUS.basic_sus(population, fitness_sum, fitness_scale)
         population.update_chromosomes(mating_pool)
-
 
 class TruncationSUS(SelectionMethod):
     def __init__(self, c, sigma=2):
